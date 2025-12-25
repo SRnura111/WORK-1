@@ -1,44 +1,25 @@
 graph TD
-    %% Пайдаланушылар бөлімі
-    subgraph Users [Пайдаланушылар]
-        U[Client Browser/Mobile]
-    end
+    %% Пайдаланушылар
+    U[Пайдаланушы / Browser] --> LB[Load Balancer]
 
-    %% Бұлттық инфрақұрылым
-    subgraph Cloud [Cloud Infrastructure - AWS/GCP]
-        LB[Load Balancer / Ingress]
+    %% Инфрақұрылым
+    subgraph Cloud [Cloud Infrastructure]
+        LB --> FE[Frontend Pod: Next.js]
+        FE --> BE[Backend Pod: Go API]
         
-        subgraph K8S [Kubernetes Cluster]
-            FE[Frontend Pods: Next.js]
-            BE[Backend Pods: Go API]
-        end
-
         subgraph Data [Data Layer]
-            DB[(PostgreSQL Database)]
-            Redis[(Redis Cache)]
-        end
-        
-        subgraph Sec [Security]
-            Vault[HashiCorp Vault / Secrets]
+            BE --> DB[(PostgreSQL)]
+            BE --> Vault[HashiCorp Vault]
         end
     end
 
     %% CI/CD Процесі
-    subgraph CICD [CI/CD Pipeline - GitHub Actions]
-        Push[Code Push] --> Test[Linter & Unit Tests]
-        Test --> Scan[Security Scan: Trivy]
-        Scan --> Build[Docker Build & Push]
-        Build --> Deploy[K8s Deployment]
+    subgraph CICD [GitHub Actions CI/CD]
+        Code[Code Push] --> Test[Lint & Unit Tests]
+        Test --> Build[Docker Build & Push]
+        Build --> Deploy[K8s Deploy]
     end
 
-    %% Байланыстар
-    U --> LB
-    LB --> FE
-    FE --> BE
-    BE --> DB
-    BE --> Redis
-    BE --> Vault
-    
-    %% Deployment байланысы
+    %% Deployment әсері
     Deploy -.-> FE
     Deploy -.-> BE
