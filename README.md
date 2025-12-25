@@ -1,21 +1,28 @@
-📊 Project Diagrams
+flowchart LR
+    %% Client side
+    User[👤 Пайдаланушы]
+    Browser[🌍 Web Browser]
 
-Бұл бөлімде жобаның құрылымы мен жұмыс процесі көрсетілген.
+    %% Frontend
+    FE["🖥️ Frontend<br/>Next.js"]
 
----
+    %% Backend
+    API["⚙️ Backend Service<br/>Go / Python"]
 
-### 🏗️ 1. Жүйе Архитектурасы (System Architecture)
-Бұл диаграмма пайдаланушы мен сервердің өзара әрекеттесуін көрсетеді:
+    %% Data layer
+    DB[(🗄️ PostgreSQL)]
+    Cache[(⚡ Redis Cache)]
 
-```mermaid
-graph TD
-    User((Пайдаланушы)) -- Browse --> FE[Frontend: Next.js]
-    FE -- API Request --> BE[Backend: Go/Python]
-    BE -- SQL --> DB[(Database: PostgreSQL)]
-    BE -- Cache --> RD((Redis))
-    
-    subgraph Cloud_Infrastructure
-        BE
+    %% Cloud block
+    subgraph Cloud["☁️ Cloud Infrastructure"]
+        API
         DB
-        RD
+        Cache
     end
+
+    %% Connections
+    User --> Browser
+    Browser --> FE
+    FE -->|HTTPS / REST| API
+    API -->|Read / Write| DB
+    API -->|Fast access| Cache
