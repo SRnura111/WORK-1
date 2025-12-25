@@ -1,6 +1,6 @@
 graph TD
     subgraph Users
-        Client[Browser/Mobile App]
+        Client[Browser / Mobile App]
     end
 
     subgraph "Cloud Infrastructure (AWS/GCP/Azure)"
