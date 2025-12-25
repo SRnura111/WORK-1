@@ -1,26 +1,15 @@
-flowchart TB
-    %% ===== USERS =====
-    User([👤 User])
+flowchart LR
+    Dev([👨‍💻 Developer])
+    Repo[📦 GitHub Repository]
+    CI[⚙️ GitHub Actions]
+    Test[🧪 Tests]
+    Scan[🔐 Security Scan]
+    Image[🐳 Docker Image]
+    Deploy[☸️ Kubernetes Deploy]
 
-    %% ===== FRONTEND =====
-    Frontend["🌐 Frontend<br/>Next.js"]
-
-    %% ===== BACKEND =====
-    API["⚙️ Backend API<br/>Go Service"]
-
-    %% ===== DATA LAYER =====
-    DB[(🗄️ PostgreSQL)]
-    Cache[(⚡ Redis)]
-
-    %% ===== INFRA =====
-    subgraph Cloud["☁️ Cloud Infrastructure"]
-        API
-        DB
-        Cache
-    end
-
-    %% ===== FLOW =====
-    User -->|HTTP| Frontend
-    Frontend -->|REST / JSON| API
-    API --> DB
-    API --> Cache
+    Dev --> Repo
+    Repo --> CI
+    CI --> Test
+    Test --> Scan
+    Scan --> Image
+    Image --> Deploy
