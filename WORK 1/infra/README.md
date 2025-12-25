@@ -1,14 +1,35 @@
-# Жоба — Архитектуралық жоспар және инфрақұрылым шаблоны
+graph TD
+    subgraph Users
+        Client[Browser/Mobile App]
+    end
 
-Мақсат: Next.js (Frontend) + Go (Backend) стекі негізінде cloud‑native қосымша құру.
+    subgraph "Cloud Infrastructure (AWS/GCP/Azure)"
+        direction TB
+        LB[Load Balancer / Ingress Controller]
+        
+        subgraph "Kubernetes Cluster"
+            FE[Frontend Pods: Next.js]
+            BE[Backend Pods: Go API]
+        end
 
-## 1. Жобаны басқару (Management)
+        subgraph "Managed Services"
+            DB[(PostgreSQL Database)]
+            Vault[HashiCorp Vault / Secrets]
+        end
+    end
 
-- Әдістеме: Scrum
-- Спринт: 2 апта
+    subgraph "CI/CD Pipeline (GitHub Actions)"
+        Code[Code Commit] --> Lint[Linter & Unit Tests]
+        Lint --> Scan[Security Scan: Trivy]
+        Scan --> Build[Docker Build & Push]
+        Build --> Deploy[Helm/K8s Deploy]
+    end
 
-## 2. Технологиялық стек
-
-- Frontend: Next.js
-- Backend: Go
-- IaC: Terraform
+    %% Interactions
+    Client --> LB
+    LB --> FE
+    FE --> BE
+    BE --> DB
+    BE --> Vault
+    Deploy -.-> FE
+    Deploy -.-> BE
