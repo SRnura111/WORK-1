@@ -1,35 +1,45 @@
 graph TD
-    subgraph Users
-        Client[Browser / Mobile App]
+    %% Пайдаланушылар бөлімі
+    subgraph Users [Пайдаланушылар]
+        U[Client Browser/Mobile]
     end
 
-    subgraph "Cloud Infrastructure (AWS/GCP/Azure)"
-        direction TB
-        LB[Load Balancer / Ingress Controller]
+    %% Бұлттық инфрақұрылым
+    subgraph Cloud [Cloud Infrastructure - AWS/GCP]
+        LB[Load Balancer / Ingress]
         
-        subgraph "Kubernetes Cluster"
+        subgraph K8S [Kubernetes Cluster]
             FE[Frontend Pods: Next.js]
             BE[Backend Pods: Go API]
         end
 
-        subgraph "Managed Services"
+        subgraph Data [Data Layer]
             DB[(PostgreSQL Database)]
+            Redis[(Redis Cache)]
+        end
+        
+        subgraph Sec [Security]
             Vault[HashiCorp Vault / Secrets]
         end
     end
 
-    subgraph "CI/CD Pipeline (GitHub Actions)"
-        Code[Code Commit] --> Lint[Linter & Unit Tests]
-        Lint --> Scan[Security Scan: Trivy]
+    %% CI/CD Процесі
+    subgraph CICD [CI/CD Pipeline - GitHub Actions]
+        Push[Code Push] --> Test[Linter & Unit Tests]
+        Test --> Scan[Security Scan: Trivy]
         Scan --> Build[Docker Build & Push]
-        Build --> Deploy[Helm/K8s Deploy]
+        Build --> Deploy[K8s Deployment]
     end
 
-    %% Interactions
-    Client --> LB
+    %% Байланыстар
+    U --> LB
     LB --> FE
     FE --> BE
     BE --> DB
+    BE --> Redis
     BE --> Vault
+    
+    %% Deployment байланысы
     Deploy -.-> FE
     Deploy -.-> BE
+    
