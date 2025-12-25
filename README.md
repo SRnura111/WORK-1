@@ -1,15 +1,26 @@
-flowchart LR
-    Dev[👨‍💻 Developer]
-    GitHub[📦 GitHub Repo]
-    CI[🔄 GitHub Actions CI]
-    Tests[🧪 Tests & Linter]
-    Security[🔐 Security Scan]
-    Docker[🐳 Docker Registry]
-    K8s[☸️ Kubernetes Cluster]
+flowchart TB
+    %% ===== USERS =====
+    User([👤 User])
 
-    Dev --> GitHub
-    GitHub --> CI
-    CI --> Tests
-    Tests --> Security
-    Security --> Docker
-    Docker --> K8s
+    %% ===== FRONTEND =====
+    Frontend["🌐 Frontend<br/>Next.js"]
+
+    %% ===== BACKEND =====
+    API["⚙️ Backend API<br/>Go Service"]
+
+    %% ===== DATA LAYER =====
+    DB[(🗄️ PostgreSQL)]
+    Cache[(⚡ Redis)]
+
+    %% ===== INFRA =====
+    subgraph Cloud["☁️ Cloud Infrastructure"]
+        API
+        DB
+        Cache
+    end
+
+    %% ===== FLOW =====
+    User -->|HTTP| Frontend
+    Frontend -->|REST / JSON| API
+    API --> DB
+    API --> Cache
