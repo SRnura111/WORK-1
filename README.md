@@ -1,11 +1,15 @@
 flowchart LR
-    User[👤 User]
-    Frontend[🌐 Frontend<br/>Next.js]
-    Backend[⚙️ Backend API<br/>Go]
-    Database[(🗄️ Database<br/>PostgreSQL)]
-    Cache[(⚡ Redis Cache)]
+    Dev[👨‍💻 Developer]
+    GitHub[📦 GitHub Repo]
+    CI[🔄 GitHub Actions CI]
+    Tests[🧪 Tests & Linter]
+    Security[🔐 Security Scan]
+    Docker[🐳 Docker Registry]
+    K8s[☸️ Kubernetes Cluster]
 
-    User --> Frontend
-    Frontend --> Backend
-    Backend --> Database
-    Backend --> Cache
+    Dev --> GitHub
+    GitHub --> CI
+    CI --> Tests
+    Tests --> Security
+    Security --> Docker
+    Docker --> K8s
